@@ -1,18 +1,21 @@
 package com.skystudent.springprojectedu.service;
 
+import com.skystudent.springprojectedu.models.User;
 import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.MockitoJUnitRunner;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 class UserServiceTest {
-
 
     @Mock
     private UserDaoImpl userDao;
@@ -25,12 +28,16 @@ class UserServiceTest {
     }
 
     @Test
-    private void checkUserExist(){
+    public void checkUserExist(){
 
-        userDao.addNewUser("Mock");
+        User mockUser = userDao.getUserByName("Mock");
 
-        when(userService.checkUserExists(userDao.getUserByName("Mock"))).thenReturn(true);
-        when(userService.checkUserExists(userDao.getUserByName("Noname"))).thenReturn(false);
+        when(userDao. getUserByName("Mock")).thenReturn(mockUser);
+        when(userDao. getUserByName("Noname")).thenReturn(null);
+
+        assertTrue(userService.checkUserExists(userDao.getUserByName("Mock")));
+        assertFalse(userService.checkUserExists(userDao.getUserByName("Noname")));
+
     }
 
 }
